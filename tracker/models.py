@@ -1,4 +1,5 @@
 from django.db import models
+from django_extensions.db.fields import AutoSlugField
 from django.utils.encoding import python_2_unicode_compatible
 from bug_report_tool.users.models import User
 
@@ -19,6 +20,7 @@ class Project(models.Model):
     production_site = models.CharField(max_length=100, blank=True, null=True)
     type_of_project = models.CharField(max_length=10, choices=TYPE_OF_PROJECT,
                                        default='Scrum')
+    slug = AutoSlugField(populate_from=['project_name', ])
 
     def __str__(self):
         return self.project_name

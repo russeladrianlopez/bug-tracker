@@ -6,7 +6,7 @@ from . import models
 
 
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ['project_name', 'tester']
+    list_display = ['project_name', 'tester', 'slug']
     fields = (
         'project_name',
         'tester',

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Project: {{ object.project_name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+
+      <h2>{{ object.project_name }}</h2>
+      {% if object.project_name %}
+        <h6>Type:</h6><p>{{ object.type_of_project }}</p>
+        <h6>Start Date:</h6> <p>{{ object.start_date }}</p>
+        <h6>End Date:</h6> <p>{{ object.end_date }}</p>
+        <h6>Staging Site:</h6> <p>{{ object.staging_site }}</p>
+        <h6>Production Site:</h6> <p>{{ object.production_site }}</p>
+
+      {% endif %}
+    </div>
+  </div>
+
+{% if object.tester == request.user %}
+<!-- Action buttons -->
+<div class="row">
+
+  <div class="col-sm-12">
+    <a class="btn btn-primary" href="" role="button">Edit</a>
+    <a class="btn btn-primary" href="" role="button">Submit Bugs</a>
+  </div>
+
+</div>
+<!-- End Action buttons -->
+{% endif %}
+
+
+</div>
+{% endblock content %}
+
