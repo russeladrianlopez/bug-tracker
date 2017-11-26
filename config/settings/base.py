@@ -56,6 +56,7 @@ LOCAL_APPS = [
     # custom users app
     'bug_report_tool.users.apps.UsersConfig',
     # Your stuff: custom apps go here
+    'tracker',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
