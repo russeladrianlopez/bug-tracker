@@ -9,6 +9,11 @@ urlpatterns = [
         name='projects'
     ),
     url(
+        regex=r'^recent_bugs/$',
+        view=views.BugListView.as_view(),
+        name='buglist'
+    ),
+    url(
         regex=r'^create/$',
         view=views.CreateProjectView.as_view(),
         name='create'
@@ -23,4 +28,5 @@ urlpatterns = [
         view=views.UpdateProjectView.as_view(),
         name='update'
     ),
+
 ]
