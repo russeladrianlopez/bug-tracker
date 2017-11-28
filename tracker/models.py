@@ -24,3 +24,24 @@ class Project(models.Model):
 
     def __str__(self):
         return self.project_name
+
+
+@python_2_unicode_compatible
+class Bug(models.Model):
+    BUG_TYPE = (
+        ('UI', 'User Interface'),
+        ('functional', 'Functional'),
+        ('recurring', 'Recurring'),
+    )
+    project_name = models.ForeignKey(Project, related_name='project')
+    name = models.CharField(max_length=100, blank=False)
+    bug_description = models.TextField(blank=True)
+    steps_to_replicate = models.TextField(blank=True)
+    actual_output = models.TextField(blank=True)
+    expected_output = models.TextField(blank=True)
+    date_reported = models.DateField(blank=True, null=True)
+    bug_type = models.CharField(max_length=15, choices=BUG_TYPE,
+                                default='functional')
+
+    def __str__(self):
+        return self.name
