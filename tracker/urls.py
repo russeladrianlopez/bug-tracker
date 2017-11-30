@@ -28,5 +28,10 @@ urlpatterns = [
         view=views.UpdateProjectView.as_view(),
         name='update'
     ),
+    url(
+        regex=r'^(?P<project_name>[\w.@+-]+)/bug/add/$',
+        view=views.BugReportView.as_view(),
+        name='newbug'
+    ),
 
 ]

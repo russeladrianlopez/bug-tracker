@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}Recent Bugs{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2>Recent Bugs</h2>
+  <div class="list-group">
+    {% for bug in bug_list %}
+      <a href="" class="list-group-item">
+        <h4 class="list-group-item-heading">{{ bug.name }}</h4>
+      </a>
+    {% endfor %}
+  </div>
+</div>
+{% endblock content %}

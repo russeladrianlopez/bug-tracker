@@ -3,7 +3,7 @@ from django.views.generic import ListView, CreateView, DetailView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Project, Bug
-from .forms import ProjectForm
+from .forms import ProjectForm, BugForm
 
 # Create your views here.
 
@@ -44,3 +44,23 @@ class UpdateProjectView(LoginRequiredMixin, UpdateView):
 class BugListView(LoginRequiredMixin, ListView):
     model = Bug
     template_name = 'tracker/bug/bug_list_all.html'
+
+
+class ProjectBugListView(LoginRequiredMixin, ListView):
+    pass
+
+
+class BugReportView(LoginRequiredMixin, CreateView):
+    form_class = BugForm
+    slug_field = 'project_name'
+    slug_url_kwarg = 'project_name'
+    template_name = 'tracker/bug/bug_new.html'
+
+    def get_initial(self):
+        project = Project.objects.get(slug=self.kwargs['project_name'])
+        return {'project_name': project}
+
+    # send the user back to the projects list
+    def get_success_url(self):
+        return reverse('tracker:detail',
+                       kwargs={'slug': self.kwargs['project_name']})

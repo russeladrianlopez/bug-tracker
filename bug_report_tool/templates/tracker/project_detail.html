@@ -26,8 +26,8 @@
 <div class="row">
 
   <div class="col-sm-12">
-    <a class="btn btn-primary" href="{% url 'tracker:update' object.project_name %}" role="button">Edit</a>
-    <a class="btn btn-primary" href="" role="button">Submit Bugs</a>
+    <a class="btn btn-primary" href="{% url 'tracker:update' object.project_name|slugify %}" role="button">Edit</a>
+    <a class="btn btn-primary" href="{% url 'tracker:newbug' object.project_name|slugify %}" role="button">Submit Bugs</a>
   </div>
 
 </div>
