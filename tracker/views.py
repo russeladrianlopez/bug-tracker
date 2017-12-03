@@ -8,6 +8,18 @@ from .forms import ProjectForm, BugForm
 # Create your views here.
 
 
+class ProjectBugMixin(LoginRequiredMixin, object):
+
+    def get_project_bugs(self):
+        project = Project.objects.get(slug=self.kwargs['slug'])
+        return Bug.objects.filter(project_name_id=project.id)
+
+    def get_context_data(self, **kwargs):
+        context = super(ProjectBugMixin, self).get_context_data(**kwargs)
+        context['bugs'] = self.get_project_bugs()
+        return context
+
+
 class ProjectListView(LoginRequiredMixin, ListView):
     model = Project
 
@@ -21,7 +33,7 @@ class CreateProjectView(LoginRequiredMixin, CreateView):
         return reverse('tracker:projects')
 
 
-class ProjectDetailView(LoginRequiredMixin, DetailView):
+class ProjectDetailView(ProjectBugMixin, LoginRequiredMixin, DetailView):
     model = Project
 
 
@@ -44,10 +56,6 @@ class UpdateProjectView(LoginRequiredMixin, UpdateView):
 class BugListView(LoginRequiredMixin, ListView):
     model = Bug
     template_name = 'tracker/bug/bug_list_all.html'
-
-
-class ProjectBugListView(LoginRequiredMixin, ListView):
-    pass
 
 
 class BugReportView(LoginRequiredMixin, CreateView):
