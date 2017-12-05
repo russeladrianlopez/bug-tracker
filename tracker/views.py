@@ -1,27 +1,20 @@
 from django.core.urlresolvers import reverse
-from django.views.generic import ListView, CreateView, DetailView, UpdateView
+from django.views.generic import ListView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Project, Bug
 from .forms import ProjectForm, BugForm
 
+
 # Create your views here.
-
-
-class ProjectBugMixin(LoginRequiredMixin, object):
-
-    def get_project_bugs(self):
-        project = Project.objects.get(slug=self.kwargs['slug'])
-        return Bug.objects.filter(project_name_id=project.id)
-
-    def get_context_data(self, **kwargs):
-        context = super(ProjectBugMixin, self).get_context_data(**kwargs)
-        context['bugs'] = self.get_project_bugs()
-        return context
-
-
 class ProjectListView(LoginRequiredMixin, ListView):
     model = Project
+    paginate_by = 3
+
+    def get_context_data(self, **kwargs):
+        context = super(ProjectListView, self).get_context_data(**kwargs)
+        context['range'] = range(context["paginator"].num_pages)
+        return context
 
 
 class CreateProjectView(LoginRequiredMixin, CreateView):
@@ -33,8 +26,21 @@ class CreateProjectView(LoginRequiredMixin, CreateView):
         return reverse('tracker:projects')
 
 
-class ProjectDetailView(ProjectBugMixin, LoginRequiredMixin, DetailView):
+class ProjectView(LoginRequiredMixin, ListView):
     model = Project
+    paginate_by = 1
+    template_name = 'tracker/project_detail.html'
+    context_object_name = 'project_buglist'
+
+    def get_queryset(self):
+        project = Project.objects.get(slug=self.kwargs['slug'])
+        return Bug.objects.filter(project_name_id=project.id)
+
+    def get_context_data(self, **kwargs):
+        context = super(ProjectView, self).get_context_data(**kwargs)
+        context['range'] = range(context["paginator"].num_pages)
+        context['project'] = Project.objects.get(slug=self.kwargs['slug'])
+        return context
 
 
 class UpdateProjectView(LoginRequiredMixin, UpdateView):
@@ -56,6 +62,12 @@ class UpdateProjectView(LoginRequiredMixin, UpdateView):
 class BugListView(LoginRequiredMixin, ListView):
     model = Bug
     template_name = 'tracker/bug/bug_list_all.html'
+    paginate_by = 3
+
+    def get_context_data(self, **kwargs):
+        context = super(BugListView, self).get_context_data(**kwargs)
+        context['range'] = range(context["paginator"].num_pages)
+        return context
 
 
 class BugReportView(LoginRequiredMixin, CreateView):

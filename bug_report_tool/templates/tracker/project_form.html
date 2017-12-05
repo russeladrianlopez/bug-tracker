@@ -5,7 +5,7 @@
 
 {% block content %}
   <h1>{{ object.project_name }}</h1>
-  <form class="form-horizontal" method="post" action="{% url 'tracker:update' object.project_name %}">
+  <form class="form-horizontal" method="post" action="{% url 'tracker:update' object.project_name|slugify %}">
     {% csrf_token %}
     {{ form|crispy }}
     <div class="control-group">

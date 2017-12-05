@@ -1,35 +1,35 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Project: {{ object.project_name }}{% endblock %}
+{% block title %}Project: {{ project.project_name }}{% endblock %}
 
 {% block content %}
 <div class="container">
 
   <div class="row">
     <div class="col-sm-12">
-      <h2>{{ object.project_name }} <a class="btn btn-primary" href="{% url 'tracker:update' object.project_name|slugify %}" role="button">Edit</a></h2>
+      <h2>{{ project.project_name }} <a class="btn btn-primary" href="{% url 'tracker:update' project.project_name|slugify %}" role="button">Edit</a></h2>
 
 
-      {% if object.project_name %}
-        <h6>Type:</h6><p>{{ object.type_of_project }}</p>
-        <h6>Start Date:</h6> <p>{{ object.start_date }}</p>
-        <h6>End Date:</h6> <p>{{ object.end_date }}</p>
-        <h6>Staging Site:</h6> <p>{{ object.staging_site }}</p>
-        <h6>Production Site:</h6> <p>{{ object.production_site }}</p>
+      {% if project.project_name %}
+        <h6>Type:</h6><p>{{ project.type_of_project }}</p>
+        <h6>Start Date:</h6> <p>{{ project.start_date }}</p>
+        <h6>End Date:</h6> <p>{{ project.end_date }}</p>
+        <h6>Staging Site:</h6> <p>{{ project.staging_site }}</p>
+        <h6>Production Site:</h6> <p>{{ project.production_site }}</p>
 
       {% endif %}
     </div>
   </div>
-  {% include "tracker/bug/bug_project_list.html" with project_buglist=bugs%}
+  {% include "tracker/bug/bug_project_list.html" with project_buglist=project_buglist %}
 
 
-{% if object.tester == request.user %}
+{% if project.tester == request.user %}
 <!-- Action buttons -->
 <div class="row">
 
   <div class="col-sm-12">
-    <a class="btn btn-primary btn-margin-top" href="{% url 'tracker:newbug' object.project_name|slugify %}" role="button">Submit Bugs</a>
+    <a class="btn btn-primary btn-margin-top" href="{% url 'tracker:newbug' project.project_name|slugify %}" role="button">Submit Bugs</a>
   </div>
 
 </div>
