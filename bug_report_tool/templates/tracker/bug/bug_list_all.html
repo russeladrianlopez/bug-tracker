@@ -7,7 +7,7 @@
   <h2>Recent Bugs</h2>
   <div class="list-group">
     {% for bug in bug_list %}
-      <a href="" class="list-group-item">
+      <a href="{% url 'tracker:bugdetail' bug.project_name|slugify bug.id %}" class="list-group-item">
         <h4 class="list-group-item-heading">{{ bug.name }}</h4>
       </a>
     {% endfor %}
@@ -26,7 +26,6 @@
           <a href="/projects/recent_bugs/?page={{forloop.counter}}">{{forloop.counter}}</a>
         </li>
       {% endfor %}
-
       {% if page_obj.has_next %}
         <li class="page-btn">
           <a href="/projects/recent_bugs/?page={{ page_obj.next_page_number }}">&raquo;</a>
@@ -34,6 +33,5 @@
       {% endif %}
     </ul>
   {% endif %}
-
 </div>
 {% endblock content %}
