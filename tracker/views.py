@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse
-from django.views.generic import ListView, CreateView, UpdateView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Project, Bug
@@ -7,6 +7,24 @@ from .forms import ProjectForm, BugForm
 
 
 # Create your views here.
+
+class ProjectView(LoginRequiredMixin, ListView):
+    model = Project
+    paginate_by = 1
+    template_name = 'tracker/project_detail.html'
+    context_object_name = 'project_buglist'
+
+    def get_queryset(self):
+        project = Project.objects.get(slug=self.kwargs['slug'])
+        return Bug.objects.filter(project_name_id=project.id)
+
+    def get_context_data(self, **kwargs):
+        context = super(ProjectView, self).get_context_data(**kwargs)
+        context['range'] = range(context["paginator"].num_pages)
+        context['project'] = Project.objects.get(slug=self.kwargs['slug'])
+        return context
+
+
 class ProjectListView(LoginRequiredMixin, ListView):
     model = Project
     paginate_by = 3
@@ -26,28 +44,10 @@ class CreateProjectView(LoginRequiredMixin, CreateView):
         return reverse('tracker:projects')
 
 
-class ProjectView(LoginRequiredMixin, ListView):
-    model = Project
-    paginate_by = 1
-    template_name = 'tracker/project_detail.html'
-    context_object_name = 'project_buglist'
-
-    def get_queryset(self):
-        project = Project.objects.get(slug=self.kwargs['slug'])
-        return Bug.objects.filter(project_name_id=project.id)
-
-    def get_context_data(self, **kwargs):
-        context = super(ProjectView, self).get_context_data(**kwargs)
-        context['range'] = range(context["paginator"].num_pages)
-        context['project'] = Project.objects.get(slug=self.kwargs['slug'])
-        return context
-
-
 class UpdateProjectView(LoginRequiredMixin, UpdateView):
-
-    fields = '__all__'
-
     model = Project
+    fields = '__all__'
+    template_name = 'tracker/project_form.html'
 
     # send the user back to their own project page after a successful update
     def get_success_url(self):
@@ -57,6 +57,12 @@ class UpdateProjectView(LoginRequiredMixin, UpdateView):
     def get_object(self):
         # Only get the Project record for the user making the request
         return Project.objects.get(slug=self.kwargs['slug'])
+
+
+class BugView(DetailView):
+    model = Bug
+    template_name = 'tracker/bug/bug_detail.html'
+    context_object_name = 'bug'
 
 
 class BugListView(LoginRequiredMixin, ListView):

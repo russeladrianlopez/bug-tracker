@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Project: {{ bug.name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+      <h2>{{ bug.name }} <a class="btn btn-primary" href="" role="button">Edit</a></h2>
+
+
+      {% if bug %}
+        <h6>Project:</h6><p>{{ bug.project_name }}</p>
+        <h6>Type:</h6><p>{{ bug.bug_type }}</p>
+        <h6>Date Reported:</h6><p>{{ bug.date_reported }}</p>
+        <h6>Description:</h6> <p>{{ bug.bug_description }}</p>
+        <h6>Step to Replicate:</h6> <p>{{ bug.steps_to_replicate }}</p>
+        <h6>Actual Output:</h6> <p>{{ bug.actual_output }}</p>
+        <h6>Expected Output:</h6> <p>{{ bug.expected_output }}</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock content %}
