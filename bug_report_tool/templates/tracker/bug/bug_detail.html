@@ -8,7 +8,7 @@
 
   <div class="row">
     <div class="col-sm-12">
-      <h2>{{ bug.name }} <a class="btn btn-primary" href="" role="button">Edit</a></h2>
+      <h2>{{ bug.name }} <a class="btn btn-primary" href="{% url 'tracker:bugupdate' bug.project_name|slugify bug.id %}" role="button">Edit</a></h2>
 
 
       {% if bug %}

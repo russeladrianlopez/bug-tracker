@@ -34,6 +34,11 @@ urlpatterns = [
         name='bugdetail'
     ),
     url(
+        regex=r'^(?P<slug>[\w.@+-]+)/(?P<pk>[\w-]+)/update/$',
+        view=views.UpdateBugView.as_view(),
+        name='bugupdate'
+    ),
+    url(
         regex=r'^(?P<project_name>[\w.@+-]+)/bug/add/$',
         view=views.BugReportView.as_view(),
         name='newbug'

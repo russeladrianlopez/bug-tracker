@@ -48,6 +48,7 @@ class UpdateProjectView(LoginRequiredMixin, UpdateView):
     model = Project
     fields = '__all__'
     template_name = 'tracker/project_form.html'
+    context_object_name = 'project'
 
     # send the user back to their own project page after a successful update
     def get_success_url(self):
@@ -90,3 +91,20 @@ class BugReportView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('tracker:detail',
                        kwargs={'slug': self.kwargs['project_name']})
+
+
+class UpdateBugView(LoginRequiredMixin, UpdateView):
+    model = Bug
+    fields = '__all__'
+    template_name = 'tracker/bug/bug_update.html'
+    context_object_name = 'bug'
+
+    # send the user back to their own project page after a successful update
+    def get_success_url(self):
+        return reverse('tracker:bugdetail',
+                       kwargs={'slug': self.kwargs['slug'],
+                               'pk': self.kwargs['pk']})
+
+    def get_object(self):
+        # Only get the Project record for the user making the request
+        return Bug.objects.get(id=self.kwargs['pk'])
