@@ -1,5 +1,6 @@
 from django.core.urlresolvers import reverse
-from django.views.generic import ListView, CreateView, DetailView, UpdateView
+from django.views.generic import (TemplateView, ListView, CreateView,
+                                  DetailView, UpdateView)
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Project, Bug
@@ -7,6 +8,15 @@ from .forms import ProjectForm, BugForm
 
 
 # Create your views here.
+class DashboardView(LoginRequiredMixin, TemplateView):
+    template_name = 'pages/home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(DashboardView, self).get_context_data(**kwargs)
+        context['project_list'] = Project.objects.filter(
+            tester=self.request.user.id).order_by("id")
+        return context
+
 
 class ProjectView(LoginRequiredMixin, ListView):
     model = Project
