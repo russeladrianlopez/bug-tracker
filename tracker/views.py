@@ -39,6 +39,9 @@ class ProjectListView(LoginRequiredMixin, ListView):
     model = Project
     paginate_by = 3
 
+    def get_queryset(self):
+        return Project.objects.filter(tester=self.request.user.id)
+
     def get_context_data(self, **kwargs):
         context = super(ProjectListView, self).get_context_data(**kwargs)
         context['range'] = range(context["paginator"].num_pages)

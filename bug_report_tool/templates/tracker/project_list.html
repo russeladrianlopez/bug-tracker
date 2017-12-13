@@ -1,42 +1,47 @@
 {% extends "base.html" %}
 {% load static i18n %}
+
 {% block title %}Projects{% endblock %}
 
 {% block content %}
 <div class="container">
+
   <h2>Projects</h2>
   <div class="addproject">
-    <a class="btn btn-primary" href="{% url 'tracker:create' %}" role="button">Create Project</a>
+    <a class="btn btn-primary" href="{% url 'tracker:create-project' %}" role="button">Create Project</a>
   </div>
 
   <div class="list-group">
     {% for project in project_list %}
+      {% if project.tester == request.user %}
       <a href="{% url 'tracker:detail' project.project_name|slugify %}" class="list-group-item">
         <h4 class="list-group-item-heading">{{ project.project_name }}</h4>
         <p class="list-group-item-text">{% trans "Placeholder for Team or Client Name" %}</p>
       </a>
+      {% endif %}
     {% endfor %}
   </div>
 
   {% if is_paginated %}
-    <ul class="pagination">
-      {% if page_obj.has_previous %}
-        <li class="page-btn">
-          <a href="/projects/?page={{ page_obj.previous_page_number }}">&laquo;</a>
-        </li>
-      {% endif %}
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+      <li class="page-btn">
+        <a href="/projects/?page={{ page_obj.previous_page_number }}">&laquo;</a>
+      </li>
+    {% endif %}
 
-      {% for i in range %}
-        <li class="page-btn {% if page_obj.number == forloop.counter %} page-btn-active {% endif %}"">
-          <a href="/projects/?page={{forloop.counter}}">{{forloop.counter}}</a>
-        </li>
-      {% endfor %}
-      {% if page_obj.has_next %}
-        <li class="page-btn">
-          <a href="/projects/?page={{ page_obj.next_page_number }}">&raquo;</a>
-        </li>
-      {% endif %}
-    </ul>
+    {% for i in range %}
+      <li class="page-btn {% if page_obj.number == forloop.counter %} page-btn-active {% endif %}"">
+        <a href="/projects/?page={{forloop.counter}}">{{forloop.counter}}</a>
+      </li>
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+      <li class="page-btn">
+        <a href="/projects/?page={{ page_obj.next_page_number }}">&raquo;</a>
+      </li>
+    {% endif %}
+  </ul>
   {% endif %}
 </div>
 {% endblock content %}

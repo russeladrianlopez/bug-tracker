@@ -3,6 +3,7 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
+
     url(
         regex=r'^$',
         view=views.ProjectListView.as_view(),
@@ -16,7 +17,7 @@ urlpatterns = [
     url(
         regex=r'^create/$',
         view=views.CreateProjectView.as_view(),
-        name='create'
+        name='create-project'
     ),
     url(
         regex=r'^(?P<slug>[\w.@+-]+)/$',
@@ -43,5 +44,4 @@ urlpatterns = [
         view=views.BugReportView.as_view(),
         name='newbug'
     ),
-
 ]
