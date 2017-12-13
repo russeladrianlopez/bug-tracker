@@ -5,7 +5,7 @@
 
 {% block content %}
   <h1>Create Project</h1>
-  <form class="form-horizontal" method="post" action="{% url 'tracker:create' %}">
+  <form class="form-horizontal" method="post" action="{% url 'tracker:create-project' %}" id="create">
     {% csrf_token %}
     {{ form|crispy }}
     <div class="control-group">
