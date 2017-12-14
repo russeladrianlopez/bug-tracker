@@ -32,13 +32,13 @@
 
 
       {% if bug %}
-        <h6>Project:</h6><p>{{ bug.project_name }}</p>
-        <h6>Type:</h6><p>{{ bug.bug_type }}</p>
-        <h6>Date Reported:</h6><p>{{ bug.date_reported }}</p>
-        <h6>Description:</h6> <p>{{ bug.bug_description }}</p>
-        <h6>Step to Replicate:</h6> <p>{{ bug.steps_to_replicate }}</p>
-        <h6>Actual Output:</h6> <p>{{ bug.actual_output }}</p>
-        <h6>Expected Output:</h6> <p>{{ bug.expected_output }}</p>
+        <p><b>Project:</b> {{ bug.project_name }}</p>
+        <p><b>Type:</b> {{ bug.bug_type }}</p>
+        <p><b>Date Reported:</b> {{ bug.date_reported|date:"D, F j, Y" }}</p>
+        <p><b>Description:</b> {{ bug.bug_description }}</p>
+        <p><b>Step to Replicate:</b> {{ bug.steps_to_replicate }}</p>
+        <p><b>Actual Output:</b> {{ bug.actual_output }}</p>
+        <p><b>Expected Output:</b> {{ bug.expected_output }}</p>
       {% endif %}
     </div>
   </div>
