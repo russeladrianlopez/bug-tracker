@@ -1,15 +1,35 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static i18n %}
 
 {% block title %}Project: {{ project.project_name }}{% endblock %}
 
+{% block sidebar %}
+<nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar mt-4">
+  <ul class="nav nav-pills flex-column">
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'home' %}">{% trans "Dashboard" %}</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'tracker:buglist' %}">{% trans "Bug Reports" %}</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'tracker:projects' %}">{% trans "My Projects" %}</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">{% trans "Statistics" %}</a>
+    </li>
+  </ul>
+</nav>
+{% endblock %}
+
+
 {% block content %}
-<div class="container">
+<main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
 
   <div class="row">
     <div class="col-sm-12">
       {% if project.tester == request.user %}
-        <h2>{{ project.project_name }} <a class="btn btn-primary" href="{% url 'tracker:update' project.project_name|slugify %}" role="button">Edit</a></h2>
+        <h1>{{ project.project_name }} <a class="btn btn-primary" href="{% url 'tracker:update' project.project_name|slugify %}" role="button">Edit</a></h1>
       {% endif %}
 
       {% if project.project_name %}
@@ -27,17 +47,19 @@
 
 {% if project.tester == request.user %}
 <!-- Action buttons -->
-<div class="row">
+  <div class="row">
 
-  <div class="col-sm-12">
-    <a class="btn btn-primary btn-margin-top" href="{% url 'tracker:newbug' project.project_name|slugify %}" role="button">Submit Bugs</a>
+    <div class="col-sm-12">
+      <a class="btn btn-primary btn-margin-top" href="{% url 'tracker:newbug' project.project_name|slugify %}" role="button">Submit Bugs</a>
+    </div>
+
   </div>
-
-</div>
 <!-- End Action buttons -->
 {% endif %}
 
 
-</div>
+</main>
 {% endblock content %}
 
+{% block javascript %}
+{% endblock %}
