@@ -75,7 +75,6 @@
     </header>
 
     <div class="container-fluid">
-
       {% if messages %}
           {% for message in messages %}
               <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
@@ -86,6 +85,8 @@
       {% block sidebar %}
           <!--sibebar content -->
       {% endblock sidebar %}
+
+
 
       {% block content %}
         <p>Use this document as a way to quick start any new project.</p>
