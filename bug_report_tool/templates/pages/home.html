@@ -2,58 +2,57 @@
 {% load static i18n %}
 
 {% block sidebar %}
-        <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar mt-4">
-          <ul class="nav nav-pills flex-column">
-            <li class="nav-item">
-              <a class="nav-link active" href="{% url 'home' %}">{% trans "Dashboard" %}<span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'tracker:buglist' %}">{% trans "Bug Reports" %}</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'tracker:projects' %}">{% trans "My Projects" %}</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">{% trans "Statistics" %}</a>
-            </li>
-          </ul>
-        </nav>
+<nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar mt-4">
+  <ul class="nav nav-pills flex-column">
+    <li class="nav-item">
+      <a class="nav-link active" href="{% url 'home' %}">{% trans "Dashboard" %}<span class="sr-only">(current)</span></a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'tracker:buglist' %}">{% trans "Bug Reports" %}</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'tracker:projects' %}">{% trans "My Projects" %}</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">{% trans "Statistics" %}</a>
+    </li>
+  </ul>
+</nav>
 {% endblock %}
 
 {% block content %}
+<main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
+  <h1>Dashboard</h1>
 
-        <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
-          <h1>Dashboard</h1>
-
-          <section class="row text-center">
-              <p>Graph Here<p> <!-- add graph feature here! -->
-          </section>
+  <section class="row text-center">
+      <p>Graph Here<p> <!-- add graph feature here! -->
+  </section>
 
 
-          <h2>Projects</h2>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>{% trans "Project Title" %}</th>
-                  <th>{% trans "Type" %}</th>
-                  <th>{% trans "Staging Site" %}</th>
-                  <th>{% trans "Production Site" %}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <!-- project list -->
-                {% for p in project_list %}
-                <tr>
-                  <td>{{ p.project_name }}</td>
-                  <td>{{ p.type_of_project }}</td>
-                  <td><a rel="stylesheet" href="{{ p.staging_site }}">{{ p.staging_site }}</a></td>
-                  <td><a rel="stylesheet" href="{{ p.staging_site }}">{{ p.production_site }}</a></td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        </main>
+  <h2>Projects</h2>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>{% trans "Project Title" %}</th>
+          <th>{% trans "Type" %}</th>
+          <th>{% trans "Staging Site" %}</th>
+          <th>{% trans "Production Site" %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- project list -->
+        {% for p in project_list %}
+        <tr>
+          <td>{{ p.project_name }}</td>
+          <td>{{ p.type_of_project }}</td>
+          <td><a rel="stylesheet" href="{{ p.staging_site }}">{{ p.staging_site }}</a></td>
+          <td><a rel="stylesheet" href="{{ p.staging_site }}">{{ p.production_site }}</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</main>
 {% endblock %}
 

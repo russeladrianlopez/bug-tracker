@@ -4,22 +4,7 @@
 {% block title %}Project: {{ project.project_name }}{% endblock %}
 
 {% block sidebar %}
-<nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar mt-4">
-  <ul class="nav nav-pills flex-column">
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'home' %}">{% trans "Dashboard" %}</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'tracker:buglist' %}">{% trans "Bug Reports" %}</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'tracker:projects' %}">{% trans "My Projects" %}</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">{% trans "Statistics" %}</a>
-    </li>
-  </ul>
-</nav>
+  {% include "sidebar.html" %}
 {% endblock %}
 
 
