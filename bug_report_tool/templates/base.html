@@ -38,11 +38,6 @@
     </header>
 
     <div class="container-fluid">
-      {% if messages %}
-          {% for message in messages %}
-              <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
-          {% endfor %}
-      {% endif %}
 
       <div class="row">
       {% block sidebar %}
@@ -51,6 +46,11 @@
 
 
       <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
+        {% if messages %}
+          {% for message in messages %}
+              <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
         {% block content %}
           <p>Use this document as a way to quick start any new project.</p>
         {% endblock content %}
