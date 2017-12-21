@@ -1,4 +1,4 @@
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.views.generic import (TemplateView, ListView, CreateView,
                                   DetailView, UpdateView)
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -7,7 +7,7 @@ from .models import Project, Bug
 from .forms import ProjectForm, BugForm
 
 
-# Create your views here.
+# General-Related Views
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/home.html'
 
@@ -17,6 +17,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             tester=self.request.user.id).order_by("id")
         return context
 
+
+# Bug-Related Views
 
 class ProjectView(LoginRequiredMixin, ListView):
     model = Project
@@ -51,10 +53,7 @@ class ProjectListView(LoginRequiredMixin, ListView):
 class CreateProjectView(LoginRequiredMixin, CreateView):
     form_class = ProjectForm
     template_name = 'tracker/project_new.html'
-
-    # send the user back to the projects list
-    def get_success_url(self):
-        return reverse('tracker:projects')
+    success_url = reverse_lazy('tracker:projects')
 
 
 class UpdateProjectView(LoginRequiredMixin, UpdateView):
@@ -72,6 +71,8 @@ class UpdateProjectView(LoginRequiredMixin, UpdateView):
         # Only get the Project record for the user making the request
         return Project.objects.get(slug=self.kwargs['slug'])
 
+
+# Bug-Related Views
 
 class BugView(DetailView):
     model = Bug
