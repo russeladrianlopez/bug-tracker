@@ -9,23 +9,20 @@
 
 
 {% block content %}
-<main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
-
-  <div class="row">
-    <div class="col-sm-12">
-      <h1>{{ bug.name }} <a class="btn btn-primary" href="{% url 'tracker:bugupdate' bug.project_name|slugify bug.id %}" role="button">Edit</a></h1>
+<div class="row">
+  <div class="col-sm-12">
+    <h1>{{ bug.name }} <a class="btn btn-primary" href="{% url 'tracker:bugupdate' bug.project_name|slugify bug.id %}" role="button">Edit</a></h1>
 
 
-      {% if bug %}
-        <p><b>Project:</b> {{ bug.project_name }}</p>
-        <p><b>Type:</b> {{ bug.bug_type }}</p>
-        <p><b>Date Reported:</b> {{ bug.date_reported|date:"D, F j, Y" }}</p>
-        <p><b>Description:</b> {{ bug.bug_description }}</p>
-        <p><b>Step to Replicate:</b> {{ bug.steps_to_replicate }}</p>
-        <p><b>Actual Output:</b> {{ bug.actual_output }}</p>
-        <p><b>Expected Output:</b> {{ bug.expected_output }}</p>
-      {% endif %}
-    </div>
+    {% if bug %}
+      <p><b>Project:</b> {{ bug.project_name }}</p>
+      <p><b>Type:</b> {{ bug.bug_type }}</p>
+      <p><b>Date Reported:</b> {{ bug.date_reported|date:"D, F j, Y" }}</p>
+      <p><b>Description:</b> {{ bug.bug_description }}</p>
+      <p><b>Step to Replicate:</b> {{ bug.steps_to_replicate }}</p>
+      <p><b>Actual Output:</b> {{ bug.actual_output }}</p>
+      <p><b>Expected Output:</b> {{ bug.expected_output }}</p>
+    {% endif %}
   </div>
-<main>
+</div>
 {% endblock content %}

@@ -21,38 +21,36 @@
 {% endblock %}
 
 {% block content %}
-<main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
-  <h1>Dashboard</h1>
+<h1>Dashboard</h1>
 
-  <section class="row text-center">
-      <p>Graph Here<p> <!-- add graph feature here! -->
-  </section>
+<section class="row text-center">
+    <p>Graph Here<p> <!-- add graph feature here! -->
+</section>
 
 
-  <h2>Projects</h2>
-  <div class="table-responsive">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>{% trans "Project Title" %}</th>
-          <th>{% trans "Type" %}</th>
-          <th>{% trans "Staging Site" %}</th>
-          <th>{% trans "Production Site" %}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- project list -->
-        {% for p in project_list %}
-        <tr>
-          <td>{{ p.project_name }}</td>
-          <td>{{ p.type_of_project }}</td>
-          <td><a rel="stylesheet" href="{{ p.staging_site }}">{{ p.staging_site }}</a></td>
-          <td><a rel="stylesheet" href="{{ p.staging_site }}">{{ p.production_site }}</a></td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-</main>
+<h2>Projects</h2>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>{% trans "Project Title" %}</th>
+        <th>{% trans "Type" %}</th>
+        <th>{% trans "Staging Site" %}</th>
+        <th>{% trans "Production Site" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- project list -->
+      {% for p in project_list %}
+      <tr>
+        <td>{{ p.project_name }}</td>
+        <td>{{ p.type_of_project }}</td>
+        <td><a rel="stylesheet" href="{{ p.staging_site }}">{{ p.staging_site }}</a></td>
+        <td><a rel="stylesheet" href="{{ p.staging_site }}">{{ p.production_site }}</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}
 

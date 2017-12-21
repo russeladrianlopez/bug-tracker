@@ -23,42 +23,41 @@
 {% endblock %}
 
 {% block content %}
-<main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
-  <div class="addproject">
-    <h1>Projects <a class="btn btn-primary" href="{% url 'tracker:create-project' %}" role="button">Create Project</a></h1>
-  </div>
+<div class="addproject">
+  <h1>Projects <a class="btn btn-primary" href="{% url 'tracker:create-project' %}" role="button">Create Project</a></h1>
+</div>
 
-  <div class="list-group">
-    {% for project in project_list %}
-      {% if project.tester == request.user %}
-      <a href="{% url 'tracker:detail' project.project_name|slugify %}" class="list-group-item">
-        <h4 class="list-group-item-heading">{{ project.project_name }}</h4>
-        <p class="list-group-item-text">{% trans "Placeholder for Team or Client Name" %}</p>
-      </a>
-      {% endif %}
-    {% endfor %}
-  </div>
-
-  {% if is_paginated %}
-  <ul class="pagination">
-    {% if page_obj.has_previous %}
-      <li class="page-btn">
-        <a href="/projects/?page={{ page_obj.previous_page_number }}">&laquo;</a>
-      </li>
+<div class="list-group">
+  {% for project in project_list %}
+    {% if project.tester == request.user %}
+    <a href="{% url 'tracker:detail' project.project_name|slugify %}" class="list-group-item">
+      <h4 class="list-group-item-heading">{{ project.project_name }}</h4>
+      <p class="list-group-item-text">{% trans "Placeholder for Team or Client Name" %}</p>
+    </a>
     {% endif %}
+  {% endfor %}
+</div>
 
-    {% for i in range %}
-      <li class="page-btn {% if page_obj.number == forloop.counter %} page-btn-active {% endif %}"">
-        <a href="/projects/?page={{forloop.counter}}">{{forloop.counter}}</a>
-      </li>
-    {% endfor %}
-
-    {% if page_obj.has_next %}
-      <li class="page-btn">
-        <a href="/projects/?page={{ page_obj.next_page_number }}">&raquo;</a>
-      </li>
-    {% endif %}
-  </ul>
+<!-- Pagination -->
+{% if is_paginated %}
+<ul class="pagination">
+  {% if page_obj.has_previous %}
+    <li class="page-btn">
+      <a href="/projects/?page={{ page_obj.previous_page_number }}">&laquo;</a>
+    </li>
   {% endif %}
-</main>
+
+  {% for i in range %}
+    <li class="page-btn {% if page_obj.number == forloop.counter %} page-btn-active {% endif %}"">
+      <a href="/projects/?page={{forloop.counter}}">{{forloop.counter}}</a>
+    </li>
+  {% endfor %}
+
+  {% if page_obj.has_next %}
+    <li class="page-btn">
+      <a href="/projects/?page={{ page_obj.next_page_number }}">&raquo;</a>
+    </li>
+  {% endif %}
+</ul>
+{% endif %}
 {% endblock content %}

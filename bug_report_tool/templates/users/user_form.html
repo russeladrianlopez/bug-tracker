@@ -4,8 +4,7 @@
 {% block title %}{{ user.username }}{% endblock %}
 
 {% block content %}
-<main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
-  <div class="col-sm-5">
+  <div class="col-sm-6">
     <h1>{{ user.username }}</h1>
     <form class="form-horizontal" method="post" action="{% url 'users:update' %}">
       {% csrf_token %}
@@ -17,5 +16,4 @@
       </div>
     </form>
   </div>
-</main>
 {% endblock %}
