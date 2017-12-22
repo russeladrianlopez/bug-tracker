@@ -2,7 +2,7 @@
 
     <div class="list-group">
     {% for bug in project_buglist %}
-      <a href="{% url 'tracker:bugdetail' project.project_name|slugify bug.id %}" class="list-group-item">
+      <a href="{% url 'tracker:bug-detail' project.project_name|slugify bug.id %}" class="list-group-item">
         <h4 class="list-group-item-heading ">{{ bug.name }}</h4>
         <p class="list-group-item-text">{{ bug.date_reported|date:"D, F j, Y" }}</p>
       </a>

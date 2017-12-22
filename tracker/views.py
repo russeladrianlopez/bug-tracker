@@ -18,11 +18,11 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         return context
 
 
-# Bug-Related Views
+# Project-Related Views
 
-class ProjectView(LoginRequiredMixin, ListView):
+class ProjectDetailView(LoginRequiredMixin, ListView):
     model = Project
-    paginate_by = 1
+    paginate_by = 5
     template_name = 'tracker/project_detail.html'
     context_object_name = 'project_buglist'
 
@@ -31,7 +31,7 @@ class ProjectView(LoginRequiredMixin, ListView):
         return Bug.objects.filter(project_name_id=project.id)
 
     def get_context_data(self, **kwargs):
-        context = super(ProjectView, self).get_context_data(**kwargs)
+        context = super(ProjectDetailView, self).get_context_data(**kwargs)
         context['range'] = range(context["paginator"].num_pages)
         context['project'] = Project.objects.get(slug=self.kwargs['slug'])
         return context
@@ -39,7 +39,7 @@ class ProjectView(LoginRequiredMixin, ListView):
 
 class ProjectListView(LoginRequiredMixin, ListView):
     model = Project
-    paginate_by = 3
+    paginate_by = 5
 
     def get_queryset(self):
         return Project.objects.filter(tester=self.request.user.id)
@@ -50,13 +50,13 @@ class ProjectListView(LoginRequiredMixin, ListView):
         return context
 
 
-class CreateProjectView(LoginRequiredMixin, CreateView):
+class ProjectCreateView(LoginRequiredMixin, CreateView):
     form_class = ProjectForm
     template_name = 'tracker/project_new.html'
     success_url = reverse_lazy('tracker:projects')
 
 
-class UpdateProjectView(LoginRequiredMixin, UpdateView):
+class ProjectUpdateView(LoginRequiredMixin, UpdateView):
     model = Project
     fields = '__all__'
     template_name = 'tracker/project_form.html'
@@ -74,7 +74,7 @@ class UpdateProjectView(LoginRequiredMixin, UpdateView):
 
 # Bug-Related Views
 
-class BugView(DetailView):
+class BugDetailView(LoginRequiredMixin, DetailView):
     model = Bug
     template_name = 'tracker/bug/bug_detail.html'
     context_object_name = 'bug'
@@ -83,7 +83,7 @@ class BugView(DetailView):
 class BugListView(LoginRequiredMixin, ListView):
     model = Bug
     template_name = 'tracker/bug/bug_list_all.html'
-    paginate_by = 3
+    paginate_by = 5
 
     def get_context_data(self, **kwargs):
         context = super(BugListView, self).get_context_data(**kwargs)
@@ -91,7 +91,7 @@ class BugListView(LoginRequiredMixin, ListView):
         return context
 
 
-class BugReportView(LoginRequiredMixin, CreateView):
+class BugCreateView(LoginRequiredMixin, CreateView):
     form_class = BugForm
     slug_field = 'project_name'
     slug_url_kwarg = 'project_name'
@@ -107,7 +107,7 @@ class BugReportView(LoginRequiredMixin, CreateView):
                        kwargs={'slug': self.kwargs['project_name']})
 
 
-class UpdateBugView(LoginRequiredMixin, UpdateView):
+class BugUpdateView(LoginRequiredMixin, UpdateView):
     model = Bug
     fields = '__all__'
     template_name = 'tracker/bug/bug_update.html'

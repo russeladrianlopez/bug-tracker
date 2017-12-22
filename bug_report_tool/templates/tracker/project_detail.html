@@ -12,7 +12,7 @@
 <div class="row">
   <div class="col-sm-12">
     {% if project.tester == request.user %}
-      <h1>{{ project.project_name }} <a class="btn btn-primary" href="{% url 'tracker:update' project.project_name|slugify %}" role="button">Edit</a></h1>
+      <h1>{{ project.project_name }} <a class="btn btn-primary" href="{% url 'tracker:project-update' project.project_name|slugify %}" role="button">Edit</a></h1>
     {% endif %}
 
     {% if project.project_name %}
@@ -30,7 +30,7 @@
   {% if project.tester == request.user %}
   <!-- Action buttons -->
   <div class="col-sm-12">
-    <h2>Recent Bugs <a class="btn btn-primary btn-margin-top" href="{% url 'tracker:newbug' project.project_name|slugify %}" role="button">Submit Bugs</a></h2>
+    <h2>Recent Bugs <a class="btn btn-primary btn-margin-top" href="{% url 'tracker:bug-create' project.project_name|slugify %}" role="button">Submit Bugs</a></h2>
   </div>
   {% else %}
   <div class="col-sm-12">

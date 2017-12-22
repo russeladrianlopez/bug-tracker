@@ -11,7 +11,7 @@
 {% block content %}
 <div class="row">
   <div class="col-sm-12">
-    <h1>{{ bug.name }} <a class="btn btn-primary" href="{% url 'tracker:bugupdate' bug.project_name|slugify bug.id %}" role="button">Edit</a></h1>
+    <h1>{{ bug.name }} <a class="btn btn-primary" href="{% url 'tracker:bug-update' bug.project_name|slugify bug.id %}" role="button">Edit</a></h1>
 
 
     {% if bug %}
