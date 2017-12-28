@@ -23,7 +23,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 class ProjectDetailView(LoginRequiredMixin, ListView):
     model = Project
     paginate_by = 5
-    template_name = 'tracker/project_detail.html'
+    template_name = 'tracker/project/detail_page.html'
     context_object_name = 'project_buglist'
 
     def get_queryset(self):
@@ -39,6 +39,7 @@ class ProjectDetailView(LoginRequiredMixin, ListView):
 
 class ProjectListView(LoginRequiredMixin, ListView):
     model = Project
+    template_name = 'tracker/project/list.html'
     paginate_by = 5
 
     def get_queryset(self):
@@ -52,14 +53,14 @@ class ProjectListView(LoginRequiredMixin, ListView):
 
 class ProjectCreateView(LoginRequiredMixin, CreateView):
     form_class = ProjectForm
-    template_name = 'tracker/project_new.html'
+    template_name = 'tracker/project/create_form.html'
     success_url = reverse_lazy('tracker:projects')
 
 
 class ProjectUpdateView(LoginRequiredMixin, UpdateView):
     model = Project
     fields = '__all__'
-    template_name = 'tracker/project_form.html'
+    template_name = 'tracker/project/update_form.html'
     context_object_name = 'project'
 
     # send the user back to their own project page after a successful update
@@ -76,13 +77,13 @@ class ProjectUpdateView(LoginRequiredMixin, UpdateView):
 
 class BugDetailView(LoginRequiredMixin, DetailView):
     model = Bug
-    template_name = 'tracker/bug/bug_detail.html'
+    template_name = 'tracker/bug/detail_page.html'
     context_object_name = 'bug'
 
 
 class BugListView(LoginRequiredMixin, ListView):
     model = Bug
-    template_name = 'tracker/bug/bug_list_all.html'
+    template_name = 'tracker/bug/list.html'
     paginate_by = 5
 
     def get_context_data(self, **kwargs):
@@ -95,7 +96,7 @@ class BugCreateView(LoginRequiredMixin, CreateView):
     form_class = BugForm
     slug_field = 'project_name'
     slug_url_kwarg = 'project_name'
-    template_name = 'tracker/bug/bug_new.html'
+    template_name = 'tracker/bug/create_form.html'
 
     def get_initial(self):
         project = Project.objects.get(slug=self.kwargs['project_name'])
@@ -110,7 +111,7 @@ class BugCreateView(LoginRequiredMixin, CreateView):
 class BugUpdateView(LoginRequiredMixin, UpdateView):
     model = Bug
     fields = '__all__'
-    template_name = 'tracker/bug/bug_update.html'
+    template_name = 'tracker/bug/update_form.html'
     context_object_name = 'bug'
 
     # send the user back to their own project page after a successful update
