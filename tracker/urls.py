@@ -14,6 +14,16 @@ urlpatterns = [
         name='bug-list'
     ),
     url(
+        regex=r'^(?P<slug>[\w.@+-]+)/(?P<pk>[\w-]+)/update/$',
+        view=views.BugUpdateView.as_view(),
+        name='bug-update'
+    ),
+    url(
+        regex=r'^(?P<slug>[\w.@+-]+)/update/$',
+        view=views.ProjectUpdateView.as_view(),
+        name='project-update'
+    ),
+    url(
         regex=r'^create/$',
         view=views.ProjectCreateView.as_view(),
         name='project-create'
@@ -33,15 +43,4 @@ urlpatterns = [
         view=views.BugDetailView.as_view(),
         name='bug-detail'
     ),
-    url(
-        regex=r'^(?P<slug>[\w.@+-]+)/update/$',
-        view=views.ProjectUpdateView.as_view(),
-        name='project-update'
-    ),
-    url(
-        regex=r'^(?P<slug>[\w.@+-]+)/(?P<pk>[\w-]+)/update/$',
-        view=views.BugUpdateView.as_view(),
-        name='bug-update'
-    ),
-
 ]
