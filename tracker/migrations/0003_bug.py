@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('steps_to_replicate', models.TextField(blank=True)),
                 ('actual_output', models.TextField(blank=True)),
                 ('expected_output', models.TextField(blank=True)),
-                ('date_reported', models.DateField(blank=True, null=True)),
+                ('date_reported', models.DateTimeField(blank=True, null=True)),
                 ('bug_type', models.CharField(choices=[('UI', 'User Interface'), ('functional', 'Functional'), ('recurring', 'Recurring')], default='functional', max_length=15)),
                 ('project_name', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='project', to='tracker.Project')),
             ],

@@ -3,9 +3,8 @@ from django_extensions.db.fields import AutoSlugField
 from django.utils.encoding import python_2_unicode_compatible
 from bug_report_tool.users.models import User
 
+
 # Create your models here.
-
-
 @python_2_unicode_compatible
 class Project(models.Model):
     TYPE_OF_PROJECT = (
@@ -14,10 +13,10 @@ class Project(models.Model):
     )
     project_name = models.CharField(max_length=100, blank=False)
     tester = models.ForeignKey(User)
-    start_date = models.DateField(blank=True, null=True)
-    end_date = models.DateField(blank=True, null=True)
-    staging_site = models.CharField(max_length=100, blank=True, null=True)
-    production_site = models.CharField(max_length=100, blank=True, null=True)
+    start_date = models.DateTimeField(blank=True, null=True)
+    end_date = models.DateTimeField(blank=True, null=True)
+    staging_site = models.URLField(max_length=100, blank=True, null=True)
+    production_site = models.URLField(max_length=100, blank=True, null=True)
     type_of_project = models.CharField(max_length=10, choices=TYPE_OF_PROJECT,
                                        default='Scrum')
     slug = AutoSlugField(populate_from=['project_name', ])
@@ -39,7 +38,7 @@ class Bug(models.Model):
     steps_to_replicate = models.TextField(blank=True)
     actual_output = models.TextField(blank=True)
     expected_output = models.TextField(blank=True)
-    date_reported = models.DateField(blank=True, null=True)
+    date_reported = models.DateTimeField(blank=True, null=True)
     bug_type = models.CharField(max_length=15, choices=BUG_TYPE,
                                 default='functional')
 
