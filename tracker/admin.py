@@ -2,27 +2,25 @@ from django.contrib import admin
 
 from . import models
 
+
 # Register your models here.
-
-
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ['project_name', 'tester', 'slug']
+    list_display = ['name', 'slug']
     fields = (
-        'project_name',
-        'tester',
+        'name',
+        'project_type',
         'start_date',
         'end_date',
         'staging_site',
         'production_site',
-        'type_of_project',
     )
 
 
 class BugReportAdmin(admin.ModelAdmin):
-    list_display = ('project_name', 'name', 'date_reported')
+    list_display = ('project', 'name', 'date_reported')
     # inlines = [BugClassificationInline, ReportedByInline, AssignedToInline]
     fields = (
-        'project_name',
+        'project',
         'name',
         'bug_type',
         'bug_description',
