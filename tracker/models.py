@@ -15,11 +15,11 @@ class Project(models.Model):
         ('Scrum', 'Scrum'),
     )
     name = models.CharField(_('Project Name'), max_length=100, blank=False)
-    slug = AutoSlugField(populate_from=['project_name', ])
+    slug = AutoSlugField(populate_from=['name', ])
     project_type = models.CharField(_('Type of Project'), max_length=10,
                                     choices=TYPE_OF_PROJECT,
                                     default='Scrum')
-    tester = models.ForeignKey(User)
+    team = models.ManyToManyField(User, through='Team')
     start_date = models.DateTimeField(
         _('Starting Date'), blank=True, null=True)
     end_date = models.DateTimeField(_('Ending Date'), blank=True, null=True)

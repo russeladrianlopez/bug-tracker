@@ -4,8 +4,17 @@ from . import models
 
 
 # Register your models here.
+class TeamInline(admin.TabularInline):
+    model = models.Team
+    verbose_name = "Team Member"
+    verbose_name_plural = "Team"
+    min_num = 1
+    extra = 0
+
+
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug']
+    inlines = (TeamInline,)
+    list_display = ['name', 'project_type', 'slug']
     fields = (
         'name',
         'project_type',
