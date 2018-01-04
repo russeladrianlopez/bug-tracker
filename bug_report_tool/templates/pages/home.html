@@ -43,8 +43,8 @@
       <!-- project list -->
       {% for p in project_list %}
       <tr>
-        <td>{{ p.project_name }}</td>
-        <td>{{ p.type_of_project }}</td>
+        <td>{{ p.name }}</td>
+        <td>{{ p.project_type }}</td>
         <td><a rel="stylesheet" href="{{ p.staging_site }}">{{ p.staging_site }}</a></td>
         <td><a rel="stylesheet" href="{{ p.staging_site }}">{{ p.production_site }}</a></td>
       </tr>

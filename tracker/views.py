@@ -14,7 +14,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
         context['project_list'] = Project.objects.filter(
-            tester=self.request.user.id).order_by("id")
+            team__members__id=self.request.user.id).order_by("id")
         return context
 
 
@@ -28,7 +28,7 @@ class ProjectDetailView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         project = Project.objects.get(slug=self.kwargs['slug'])
-        return Bug.objects.filter(project_name_id=project.id)
+        return Bug.objects.filter(project_id=project.id)
 
     def get_context_data(self, **kwargs):
         context = super(ProjectDetailView, self).get_context_data(**kwargs)
@@ -43,7 +43,8 @@ class ProjectListView(LoginRequiredMixin, ListView):
     paginate_by = 5
 
     def get_queryset(self):
-        return Project.objects.filter(tester=self.request.user.id)
+        return Project.objects.filter(
+            team__members__id=self.request.user.id)
 
     def get_context_data(self, **kwargs):
         context = super(ProjectListView, self).get_context_data(**kwargs)
@@ -54,18 +55,19 @@ class ProjectListView(LoginRequiredMixin, ListView):
 class ProjectCreateView(LoginRequiredMixin, CreateView):
     form_class = ProjectForm
     template_name = 'tracker/project/create_form.html'
-    success_url = reverse_lazy('tracker:projects')
+    success_url = reverse_lazy('tracker:project-list')
 
 
 class ProjectUpdateView(LoginRequiredMixin, UpdateView):
     model = Project
-    fields = '__all__'
+    fields = ['name', 'project_type', 'start_date', 'end_date',
+              'staging_site', 'production_site']
     template_name = 'tracker/project/update_form.html'
     context_object_name = 'project'
 
     # send the user back to their own project page after a successful update
     def get_success_url(self):
-        return reverse('tracker:detail',
+        return reverse('tracker:project-detail',
                        kwargs={'slug': self.kwargs['slug']})
 
     def get_object(self):
@@ -100,11 +102,11 @@ class BugCreateView(LoginRequiredMixin, CreateView):
 
     def get_initial(self):
         project = Project.objects.get(slug=self.kwargs['project_name'])
-        return {'project_name': project}
+        return {'project': project}
 
     # send the user back to the projects list
     def get_success_url(self):
-        return reverse('tracker:detail',
+        return reverse('tracker:project-list',
                        kwargs={'slug': self.kwargs['project_name']})
 
 
@@ -116,7 +118,7 @@ class BugUpdateView(LoginRequiredMixin, UpdateView):
 
     # send the user back to their own project page after a successful update
     def get_success_url(self):
-        return reverse('tracker:bugdetail',
+        return reverse('tracker:bug-detail',
                        kwargs={'slug': self.kwargs['slug'],
                                'pk': self.kwargs['pk']})
 

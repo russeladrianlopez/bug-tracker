@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static i18n %}
 
-{% block title %}Project: {{ project.project_name }}{% endblock %}
+{% block title %}Project: {{ project.name }} {% endblock %}
 
 {% block sidebar %}
   {% include "frame/sidebar.html" %}
@@ -11,26 +11,27 @@
 {% block content %}
 <div class="row">
   <div class="col-sm-12">
-    {% if project.tester == request.user %}
-      <h1>{{ project.project_name }} <a class="btn btn-primary" href="{% url 'tracker:project-update' project.project_name|slugify %}" role="button">Edit</a></h1>
-    {% endif %}
+    {% if request.user in project.team.all %}
+      <h1>{{ project.name }} <a class="btn btn-primary" href="{% url 'tracker:project-update' project.name|slugify %}" role="button">Edit</a></h1>
 
-    {% if project.project_name %}
-      <p><b>Type:</b> {{ project.type_of_project }}</p>
+
+      {% if project.name %}
+      <p><b>Type:</b> {{ project.project_type }}</p>
       <p><b>Start Date:</b> {{ project.start_date|date:"F j, Y" }}</p>
       <p><b>End Date:</b> {{ project.end_date|date:"F j, Y" }}</p>
       <p><b>Staging Site:</b> {{ project.staging_site }}</p>
       <p><b>Production Site:</b> {{ project.production_site }}</p>
 
+      {% endif %}
     {% endif %}
   </div>
 </div>
 
 <div class="row">
-  {% if project.tester == request.user %}
+  {% if request.user in project.team.all %}
   <!-- Action buttons -->
   <div class="col-sm-12">
-    <h2>Recent Bugs <a class="btn btn-primary btn-margin-top" href="{% url 'tracker:bug-create' project.project_name|slugify %}" role="button">Submit Bugs</a></h2>
+    <h2>Recent Bugs <a class="btn btn-primary btn-margin-top" href="{% url 'tracker:bug-create' project.name|slugify %}" role="button">Submit Bugs</a></h2>
   </div>
   {% else %}
   <div class="col-sm-12">

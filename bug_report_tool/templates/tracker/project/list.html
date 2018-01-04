@@ -29,10 +29,11 @@
 
 <div class="list-group">
   {% for project in project_list %}
-    {% if project.tester == request.user %}
-    <a href="{% url 'tracker:project-detail' project.project_name|slugify %}" class="list-group-item">
-      <h4 class="list-group-item-heading">{{ project.project_name }}</h4>
-      <p class="list-group-item-text">{% trans "Placeholder for Team or Client Name" %}</p>
+    {% if request.user in project.team.all %}
+    <a href="{% url 'tracker:project-detail' project.name|slugify %}" class="list-group-item">
+      <h4 class="list-group-item-heading">{{ project.name }}</h4>
+      <p class="list-group-item-text">
+      {% if project.staging_site %}{{ project.staging_site}}{% else %}{% trans "No Staging Site Deployed yet." %}{% endif %}</p>
     </a>
     {% endif %}
   {% endfor %}
