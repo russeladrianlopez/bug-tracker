@@ -26,9 +26,9 @@
 <h1>Recent Bugs</h1>
 <div class="list-group">
   {% for bug in bug_list %}
-    <a href="{% url 'tracker:bug-detail' bug.project_name|slugify bug.id %}" class="list-group-item">
+    <a href="{% url 'tracker:bug-detail' bug.project|slugify bug.id %}" class="list-group-item">
       <h4 class="list-group-item-heading">{{ bug.name }}</h4>
-      <p class="list-group-item-text">{{ bug.project_name }} | {{ bug.date_reported|date:"D, F j, Y" }}</p>
+      <p class="list-group-item-text">{{ bug.project }} | {{ bug.date_reported|date:"D, F j, Y" }}</p>
     </a>
   {% endfor %}
 </div>
