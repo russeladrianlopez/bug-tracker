@@ -39,6 +39,18 @@ class ProjectTeamForm(forms.ModelForm):
         exclude = ()
 
 
+class BootstrapFormset(forms.BaseInlineFormSet):
+
+    def __init__(self, *args, **kwargs):
+        super(BootstrapFormset, self).__init__(*args, **kwargs)
+
+        for form in self.forms:
+            for field in form.fields:
+                form.fields[field].widget.attrs.update(
+                    {'class': 'form-control'})
+
+
 # Inline formset for team members
 ProjectTeamFormSet = forms.inlineformset_factory(Project, Team,
-                                                 form=ProjectTeamForm, extra=1)
+                                                 form=ProjectTeamForm, extra=1,
+                                                 formset=BootstrapFormset)

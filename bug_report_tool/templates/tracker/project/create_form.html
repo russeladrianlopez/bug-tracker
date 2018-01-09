@@ -55,8 +55,10 @@
 <script type="text/javascript">
     $('.formset_row').formset({
         addText: 'Add Team Members',
-        deleteText: 'Remove?',
-        prefix: 'team_set'
+        deleteText: 'Remove',
+        prefix: 'team_set',
+        addCssClass: 'btn btn-secondary',
+        deleteCssClass: 'btn btn-danger',
     });
 </script>
 {% endblock %}
