@@ -1,10 +1,11 @@
 from django.core.urlresolvers import reverse, reverse_lazy
+from django.db import transaction
 from django.views.generic import (TemplateView, ListView, CreateView,
                                   DetailView, UpdateView)
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Project, Bug
-from .forms import ProjectForm, BugForm
+from .forms import ProjectForm, BugForm, ProjectTeamFormSet
 
 
 # General-Related Views
@@ -57,6 +58,27 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
     template_name = 'tracker/project/create_form.html'
     success_url = reverse_lazy('tracker:project-list')
 
+    def get_context_data(self, **kwargs):
+        context = super(ProjectCreateView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            context['team'] = ProjectTeamFormSet(self.request.POST)
+        else:
+            context['team'] = ProjectTeamFormSet()
+        # import pdb; pdb.set_trace()
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        team = context['team']
+        # import pdb; pdb.set_trace()
+        with transaction.atomic():
+            self.object = form.save()
+
+            if team.is_valid():
+                team.instance = self.object
+                team.save()
+        return super(ProjectCreateView, self).form_valid(form)
+
 
 class ProjectUpdateView(LoginRequiredMixin, UpdateView):
     model = Project
@@ -73,6 +95,27 @@ class ProjectUpdateView(LoginRequiredMixin, UpdateView):
     def get_object(self):
         # Only get the Project record for the user making the request
         return Project.objects.get(slug=self.kwargs['slug'])
+
+    def get_context_data(self, **kwargs):
+        context = super(ProjectUpdateView, self).get_context_data(**kwargs)
+        project = self.get_object()
+        if self.request.POST:
+            context['team'] = ProjectTeamFormSet(self.request.POST,
+                                                 instance=project)
+        else:
+            context['team'] = ProjectTeamFormSet(instance=project)
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        team = context['team']
+        with transaction.atomic():
+            self.object = form.save()
+
+            if team.is_valid():
+                team.instance = self.object
+                team.save()
+        return super(ProjectUpdateView, self).form_valid(form)
 
 
 # Bug-Related Views
@@ -106,7 +149,7 @@ class BugCreateView(LoginRequiredMixin, CreateView):
 
     # send the user back to the projects list
     def get_success_url(self):
-        return reverse('tracker:project-list',
+        return reverse('tracker:project-detail',
                        kwargs={'slug': self.kwargs['project_name']})
 
 

@@ -1,7 +1,7 @@
 from django import forms
 # from django.forms.widgets import SelectDateWidget
 
-from .models import Project, Bug
+from .models import Project, Team, Bug
 
 
 class ProjectForm(forms.ModelForm):
@@ -31,6 +31,14 @@ class BugForm(forms.ModelForm):
             )
         }
 
-    def __init__(self, *args, **kwargs):
-        super(BugForm, self).__init__(*args, **kwargs)
-        self.fields['project'].disabled = True
+
+class ProjectTeamForm(forms.ModelForm):
+
+    class Meta:
+        model = Team
+        exclude = ()
+
+
+# Inline formset for team members
+ProjectTeamFormSet = forms.inlineformset_factory(Project, Team,
+                                                 form=ProjectTeamForm, extra=1)
