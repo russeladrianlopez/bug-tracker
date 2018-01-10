@@ -5,7 +5,8 @@ from django.views.generic import (TemplateView, ListView, CreateView,
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Project, Bug
-from .forms import ProjectForm, BugForm, ProjectTeamFormSet
+from .forms import (ProjectForm, BugForm, ProjectTeamFormSet,
+                    BugClassFormSet)
 
 
 # General-Related Views
@@ -64,13 +65,11 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
             context['team'] = ProjectTeamFormSet(self.request.POST)
         else:
             context['team'] = ProjectTeamFormSet()
-        # import pdb; pdb.set_trace()
         return context
 
     def form_valid(self, form):
         context = self.get_context_data()
         team = context['team']
-        # import pdb; pdb.set_trace()
         with transaction.atomic():
             self.object = form.save()
 
@@ -147,6 +146,25 @@ class BugCreateView(LoginRequiredMixin, CreateView):
         project = Project.objects.get(slug=self.kwargs['project_name'])
         return {'project': project}
 
+    def get_context_data(self, **kwargs):
+        context = super(BugCreateView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            context['classification'] = BugClassFormSet(self.request.POST)
+        else:
+            context['classification'] = BugClassFormSet()
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        classification = context['classification']
+        with transaction.atomic():
+            self.object = form.save()
+
+            if classification.is_valid():
+                classification.instance = self.object
+                classification.save()
+        return super(BugCreateView, self).form_valid(form)
+
     # send the user back to the projects list
     def get_success_url(self):
         return reverse('tracker:project-detail',
@@ -164,6 +182,25 @@ class BugUpdateView(LoginRequiredMixin, UpdateView):
         return reverse('tracker:bug-detail',
                        kwargs={'slug': self.kwargs['slug'],
                                'pk': self.kwargs['pk']})
+
+    def get_context_data(self, **kwargs):
+        context = super(BugUpdateView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            context['classification'] = BugClassFormSet(self.request.POST)
+        else:
+            context['classification'] = BugClassFormSet()
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        classification = context['classification']
+        with transaction.atomic():
+            self.object = form.save()
+
+            if classification.is_valid():
+                classification.instance = self.object
+                classification.save()
+        return super(BugUpdateView, self).form_valid(form)
 
     def get_object(self):
         # Only get the Project record for the user making the request

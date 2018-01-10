@@ -1,7 +1,7 @@
 from django import forms
 # from django.forms.widgets import SelectDateWidget
 
-from .models import Project, Team, Bug
+from .models import Project, Team, Bug, BugClassification
 
 
 class ProjectForm(forms.ModelForm):
@@ -20,6 +20,13 @@ class ProjectForm(forms.ModelForm):
         }
 
 
+class ProjectTeamForm(forms.ModelForm):
+
+    class Meta:
+        model = Team
+        exclude = ()
+
+
 class BugForm(forms.ModelForm):
 
     class Meta:
@@ -32,13 +39,14 @@ class BugForm(forms.ModelForm):
         }
 
 
-class ProjectTeamForm(forms.ModelForm):
+class BugClassForm(forms.ModelForm):
 
     class Meta:
-        model = Team
+        model = BugClassification
         exclude = ()
 
 
+# Added bootstrap form-control class in the Inline formset input fields
 class BootstrapFormset(forms.BaseInlineFormSet):
 
     def __init__(self, *args, **kwargs):
@@ -50,7 +58,18 @@ class BootstrapFormset(forms.BaseInlineFormSet):
                     {'class': 'form-control'})
 
 
-# Inline formset for team members
+# Inline formsets
+# ProjectTeamFormSet max_num is based on an article with 13 being the magic
+# number this excluding the Product Owner and ScrumMaster so I settled with 15
+# http://rgalen.com/agile-training-news/2015/8/22/the-3-bears-of-agile-team-size
 ProjectTeamFormSet = forms.inlineformset_factory(Project, Team,
-                                                 form=ProjectTeamForm, extra=1,
+                                                 form=ProjectTeamForm,
+                                                 min_num=1,
+                                                 extra=1,
+                                                 max_num=15,
                                                  formset=BootstrapFormset)
+
+BugClassFormSet = forms.inlineformset_factory(Bug, BugClassification,
+                                              form=BugClassForm, max_num=1,
+                                              min_num=1, can_delete=False,
+                                              formset=BootstrapFormset)
