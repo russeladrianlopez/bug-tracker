@@ -13,7 +13,7 @@ class TeamInline(admin.TabularInline):
 
 
 class ProjectAdmin(admin.ModelAdmin):
-    inlines = (TeamInline,)
+    inlines = [TeamInline, ]
     list_display = ['name', 'project_type', 'slug']
     fields = (
         'name',
@@ -25,9 +25,15 @@ class ProjectAdmin(admin.ModelAdmin):
     )
 
 
+class BugClassificationInline(admin.TabularInline):
+    model = models.BugClassification
+    max_num = 1
+    can_delete = False
+
+
 class BugReportAdmin(admin.ModelAdmin):
     list_display = ('project', 'name', 'date_reported')
-    # inlines = [BugClassificationInline, ReportedByInline, AssignedToInline]
+    inlines = [BugClassificationInline, ]
     fields = (
         'project',
         'name',

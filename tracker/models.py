@@ -68,3 +68,56 @@ class Bug(models.Model):
 
     def __str__(self):
         return self.name
+
+
+@python_2_unicode_compatible
+class BugClassification(models.Model):
+    SEVERITY = (
+        ('Blocker', 'Blocker'),
+        ('Critical', 'Critical'),
+        ('Major', 'Major'),
+        ('Minor', 'Minor'),
+        ('Trivial', 'Trivial'),
+        ('Enhancement', 'Enhancement'),
+    )
+    PRIORITY = (
+        ('Critical', 'Critical'),
+        ('High', 'High'),
+        ('Medium', 'Medium'),
+        ('Low', 'Low'),
+    )
+    STATUS = (
+        ('to_do', 'To Do'),
+        ('in_progress', 'In Progress'),
+        ('for_testing', 'For Testing'),
+        ('test_in_progress', 'Testing in Progress'),
+        ('has_issues', 'Still has issues'),
+        ('done', 'Done'),
+        ('on_dev', 'On Dev'),
+    )
+    DEVICE = (
+        ('android', 'Android'),
+        ('ios', 'iOS'),
+        ('na', 'Not Applicable'),
+    )
+    BROWSER = (
+        ('firefox', 'Firefox'),
+        ('chrome', 'Chrome'),
+        ('others', 'Others'),
+        ('na', 'Not Applicable'),
+    )
+
+    bug = models.ForeignKey(Bug)
+    bug_severity = models.CharField(max_length=20, choices=SEVERITY,
+                                    default='Critical')
+    bug_priority = models.CharField(max_length=20, choices=PRIORITY,
+                                    default='Critical')
+    status = models.CharField(max_length=50, choices=STATUS,
+                              default='For Testing')
+    device = models.CharField(max_length=10, choices=DEVICE,
+                              default='na')
+    browser = models.CharField(max_length=10, choices=BROWSER,
+                               default='na')
+
+    def __str__(self):
+        return self.bug.name
