@@ -121,3 +121,25 @@ class BugClassification(models.Model):
 
     def __str__(self):
         return self.bug.name
+
+
+@python_2_unicode_compatible
+class ReportedBy(models.Model):
+    bug = models.ForeignKey(Bug)
+    reported_by = models.ForeignKey(User)
+    tester_note = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.bug.name
+
+
+@python_2_unicode_compatible
+class AssignedTo(models.Model):
+    bug = models.ForeignKey(Bug)
+    assigned_to = models.ForeignKey(User, null=True, blank=True,
+                                    limit_choices_to={
+                                        'members__role': "developer"})
+    dev_notes = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.bug.name

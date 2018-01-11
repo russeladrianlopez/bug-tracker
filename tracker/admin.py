@@ -31,9 +31,21 @@ class BugClassificationInline(admin.TabularInline):
     can_delete = False
 
 
+class ReportedByInline(admin.StackedInline):
+    model = models.ReportedBy
+    max_num = 1
+    can_delete = False
+
+
+class AssignedToInline(admin.StackedInline):
+    model = models.AssignedTo
+    max_num = 1
+    can_delete = False
+
+
 class BugReportAdmin(admin.ModelAdmin):
     list_display = ('project', 'name', 'date_reported')
-    inlines = [BugClassificationInline, ]
+    inlines = [BugClassificationInline, ReportedByInline, AssignedToInline]
     fields = (
         'project',
         'name',
