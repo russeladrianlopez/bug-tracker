@@ -53,6 +53,12 @@ class BugAuthorForm(forms.ModelForm):
         model = ReportedBy
         exclude = ()
 
+    def __init__(self, *args, **kwargs):
+        super(BugAuthorForm, self).__init__(*args, **kwargs)
+        # check if updating, set reported_by field into read-only
+        if self.instance.id:
+            self.fields['reported_by'].disabled = True
+
 
 class BugDevForm(forms.ModelForm):
 
@@ -86,10 +92,12 @@ ProjectTeamFormSet = forms.inlineformset_factory(Project, Team,
 
 BugClassFormSet = forms.inlineformset_factory(Bug, BugClassification,
                                               form=BugClassForm, max_num=1,
-                                              min_num=1, can_delete=False,
+                                              min_num=1, validate_min=True,
+                                              can_delete=False,
                                               formset=BootstrapFormset)
 
 BugAuthorFormSet = forms.inlineformset_factory(Bug, ReportedBy,
                                                form=BugAuthorForm, max_num=1,
-                                               min_num=1, can_delete=False,
+                                               min_num=1, validate_min=True,
+                                               can_delete=False,
                                                formset=BootstrapFormset)

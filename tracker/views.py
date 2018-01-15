@@ -199,25 +199,50 @@ class BugUpdateView(LoginRequiredMixin, UpdateView):
                        kwargs={'slug': self.kwargs['slug'],
                                'pk': self.kwargs['pk']})
 
+    def get_object(self):
+        # Only get the Project record for the user making the request
+        return Bug.objects.get(id=self.kwargs['pk'])
+
     def get_context_data(self, **kwargs):
         context = super(BugUpdateView, self).get_context_data(**kwargs)
+        bug = self.get_object()
         if self.request.POST:
-            context['classification'] = BugClassFormSet(self.request.POST)
+            context['classification'] = BugClassFormSet(
+                self.request.POST,
+                instance=bug,
+                prefix="classification"
+            )
+            context['author'] = BugAuthorFormSet(
+                self.request.POST,
+                instance=bug,
+                prefix="author"
+            )
         else:
-            context['classification'] = BugClassFormSet()
+            context['classification'] = BugClassFormSet(
+                instance=bug,
+                prefix="classification"
+            )
+            context['author'] = BugAuthorFormSet(
+                instance=bug,
+                prefix="author"
+            )
+            # check if current user is the author of the bug
+            # else make the tester notes read only.
+            if bug.reportedby_set.get().reported_by != self.request.user:
+                for form in context['author']:
+                    form.fields['tester_note'].disabled = True
         return context
 
     def form_valid(self, form):
         context = self.get_context_data()
         classification = context['classification']
+        author = context['author']
         with transaction.atomic():
             self.object = form.save()
 
-            if classification.is_valid():
+            if classification.is_valid() and author.is_valid():
                 classification.instance = self.object
                 classification.save()
+                author.instance = self.object
+                author.save()
         return super(BugUpdateView, self).form_valid(form)
-
-    def get_object(self):
-        # Only get the Project record for the user making the request
-        return Bug.objects.get(id=self.kwargs['pk'])
