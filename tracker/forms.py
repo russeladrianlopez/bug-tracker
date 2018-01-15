@@ -1,7 +1,8 @@
 from django import forms
 # from django.forms.widgets import SelectDateWidget
 
-from .models import Project, Team, Bug, BugClassification
+from .models import (Project, Team, Bug, BugClassification,
+                     ReportedBy, AssignedTo)
 
 
 class ProjectForm(forms.ModelForm):
@@ -46,6 +47,20 @@ class BugClassForm(forms.ModelForm):
         exclude = ()
 
 
+class BugAuthorForm(forms.ModelForm):
+
+    class Meta:
+        model = ReportedBy
+        exclude = ()
+
+
+class BugDevForm(forms.ModelForm):
+
+    class Meta:
+        model = AssignedTo
+        exclude = ()
+
+
 # Added bootstrap form-control class in the Inline formset input fields
 class BootstrapFormset(forms.BaseInlineFormSet):
 
@@ -73,3 +88,8 @@ BugClassFormSet = forms.inlineformset_factory(Bug, BugClassification,
                                               form=BugClassForm, max_num=1,
                                               min_num=1, can_delete=False,
                                               formset=BootstrapFormset)
+
+BugAuthorFormSet = forms.inlineformset_factory(Bug, ReportedBy,
+                                               form=BugAuthorForm, max_num=1,
+                                               min_num=1, can_delete=False,
+                                               formset=BootstrapFormset)

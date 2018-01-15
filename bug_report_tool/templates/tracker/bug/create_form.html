@@ -15,11 +15,39 @@
   <form class="form-horizontal" method="post" action="">
     {% csrf_token %}
     {{ form|crispy }}
-    <table class="table table-responsive table-bordered table-hover">
+    <table class="table table-responsive table-bordered">
       {{ classification.management_form }}
       {% for form in classification.forms %}
         {% if forloop.first %}
-          <thead>
+          <thead class="table-success">
+          <tr>
+              {% for field in form.visible_fields %}
+                  <th>{{ field.label|capfirst }}</th>
+              {% endfor %}
+          </tr>
+          </thead>
+        {% endif %}
+          <tr class="{% cycle row1 row2 %} formset_row">
+            {% for field in form.visible_fields %}
+                <td>
+                    {# Include the hidden fields in the form #}
+                    {% if forloop.first %}
+                        {% for hidden in form.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+                    {% endif %}
+                    {{ field.errors.as_ul }}
+                    {{ field }}
+                </td>
+            {% endfor %}
+          </tr>
+      {% endfor %}
+    </table>
+    <table class="table table-responsive table-bordered">
+      {{ author.management_form }}
+      {% for form in author.forms %}
+        {% if forloop.first %}
+          <thead class="table-success">
           <tr>
               {% for field in form.visible_fields %}
                   <th>{{ field.label|capfirst }}</th>
@@ -54,7 +82,14 @@
 <script src="{% static 'formset/jquery.formset.js' %}"></script>
 <script type="text/javascript">
     $('.formset_row').formset({
-        prefix: 'bugclassification_set',
+        prefix: {{ classification.prefix }},
+        formCssClass: 'dynamic-formset1',
+    });
+</script>
+<script type="text/javascript">
+    $('.formset_row').formset({
+        prefix: {{ author.prefix }},
+        formCssClass: 'dynamic-formset2',
     });
 </script>
 {% endblock %}

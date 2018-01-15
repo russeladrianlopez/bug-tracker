@@ -4,9 +4,9 @@ from django.views.generic import (TemplateView, ListView, CreateView,
                                   DetailView, UpdateView)
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Project, Bug
+from .models import Project, Bug, User
 from .forms import (ProjectForm, BugForm, ProjectTeamFormSet,
-                    BugClassFormSet)
+                    BugClassFormSet, BugAuthorFormSet)
 
 
 # General-Related Views
@@ -138,31 +138,47 @@ class BugListView(LoginRequiredMixin, ListView):
 
 class BugCreateView(LoginRequiredMixin, CreateView):
     form_class = BugForm
-    slug_field = 'project_name'
-    slug_url_kwarg = 'project_name'
     template_name = 'tracker/bug/create_form.html'
 
     def get_initial(self):
-        project = Project.objects.get(slug=self.kwargs['project_name'])
-        return {'project': project}
+        project = Project.objects.get(slug=self.kwargs['slug'])
+        user = User.objects.get(id=self.request.user.id)
+        return {'project': project, 'user': user}
 
     def get_context_data(self, **kwargs):
         context = super(BugCreateView, self).get_context_data(**kwargs)
         if self.request.POST:
-            context['classification'] = BugClassFormSet(self.request.POST)
+            context['classification'] = BugClassFormSet(
+                self.request.POST, prefix="classification")
+            context['author'] = BugAuthorFormSet(
+                self.request.POST, prefix="author")
         else:
-            context['classification'] = BugClassFormSet()
+            context['classification'] = BugClassFormSet(
+                prefix="classification")
+            context['author'] = BugAuthorFormSet(
+                prefix="author",
+                initial=[{'reported_by': self.get_initial()['user']}],
+            )
+            # Limit choices in reported_by fields
+            # with only project team members
+            for form in context['author']:
+                form.fields['reported_by'].queryset = User.objects.filter(
+                    project__slug=self.kwargs['slug'])
         return context
 
     def form_valid(self, form):
         context = self.get_context_data()
         classification = context['classification']
+        author = context['author']
         with transaction.atomic():
             self.object = form.save()
 
             if classification.is_valid():
                 classification.instance = self.object
                 classification.save()
+            if author.is_valid():
+                author.instance = self.object
+                author.save()
         return super(BugCreateView, self).form_valid(form)
 
     # send the user back to the projects list

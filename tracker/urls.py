@@ -29,7 +29,7 @@ urlpatterns = [
         name='project-create'
     ),
     url(
-        regex=r'^(?P<project_name>[\w.@+-]+)/bug/add/$',
+        regex=r'^(?P<slug>[\w.@+-]+)/bug/add/$',
         view=views.BugCreateView.as_view(),
         name='bug-create'
     ),
