@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Project, Bug, User
 from .forms import (ProjectForm, BugForm, ProjectTeamFormSet,
-                    BugClassFormSet, BugAuthorFormSet)
+                    BugClassFormSet, BugAuthorFormSet, BugDevFormSet)
 
 
 # General-Related Views
@@ -184,7 +184,7 @@ class BugCreateView(LoginRequiredMixin, CreateView):
     # send the user back to the projects list
     def get_success_url(self):
         return reverse('tracker:project-detail',
-                       kwargs={'slug': self.kwargs['project_name']})
+                       kwargs={'slug': self.kwargs['slug']})
 
 
 class BugUpdateView(LoginRequiredMixin, UpdateView):
@@ -217,6 +217,11 @@ class BugUpdateView(LoginRequiredMixin, UpdateView):
                 instance=bug,
                 prefix="author"
             )
+            context['dev'] = BugDevFormSet(
+                self.request.POST,
+                instance=bug,
+                prefix="dev"
+            )
         else:
             context['classification'] = BugClassFormSet(
                 instance=bug,
@@ -226,23 +231,39 @@ class BugUpdateView(LoginRequiredMixin, UpdateView):
                 instance=bug,
                 prefix="author"
             )
+            context['dev'] = BugDevFormSet(
+                instance=bug,
+                prefix="dev"
+            )
             # check if current user is the author of the bug
             # else make the tester notes read only.
             if bug.reportedby_set.get().reported_by != self.request.user:
                 for form in context['author']:
                     form.fields['tester_note'].disabled = True
+
+            # Change Queryset for only Developers of the Project
+            for form in context['dev']:
+                form.fields['assigned_to'].queryset = User.objects.filter(
+                    members__role="developer",
+                    project__slug=self.kwargs['slug']
+                )
         return context
 
     def form_valid(self, form):
         context = self.get_context_data()
         classification = context['classification']
         author = context['author']
+        dev = context['dev']
         with transaction.atomic():
             self.object = form.save()
 
-            if classification.is_valid() and author.is_valid():
+            # validates all inline formsets
+            if (classification.is_valid() and author.is_valid() and
+                    dev.is_valid()):
                 classification.instance = self.object
                 classification.save()
                 author.instance = self.object
                 author.save()
+                dev.instance = self.object
+                dev.save()
         return super(BugUpdateView, self).form_valid(form)

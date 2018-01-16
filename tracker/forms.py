@@ -93,11 +93,20 @@ ProjectTeamFormSet = forms.inlineformset_factory(Project, Team,
 BugClassFormSet = forms.inlineformset_factory(Bug, BugClassification,
                                               form=BugClassForm, max_num=1,
                                               min_num=1, validate_min=True,
+                                              validate_max=True,
                                               can_delete=False,
                                               formset=BootstrapFormset)
 
 BugAuthorFormSet = forms.inlineformset_factory(Bug, ReportedBy,
                                                form=BugAuthorForm, max_num=1,
                                                min_num=1, validate_min=True,
+                                               validate_max=True,
                                                can_delete=False,
                                                formset=BootstrapFormset)
+
+BugDevFormSet = forms.inlineformset_factory(Bug, AssignedTo,
+                                            form=BugDevForm, max_num=1,
+                                            min_num=1, validate_min=True,
+                                            validate_max=True,
+                                            can_delete=False,
+                                            formset=BootstrapFormset)
